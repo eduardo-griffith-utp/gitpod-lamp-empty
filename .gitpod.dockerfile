@@ -1,27 +1,30 @@
+# Use Ubuntu 22.04 as the base image
 FROM ubuntu:22.04
 
 # Avoid prompts from apt
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install sudo and other essential tools
-RUN apt-get update && apt-get install -y \
-    sudo \
-    curl \
-    wget \
-    git \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Update and install necessary packages
+RUN apt update && \
+    apt-get install -y vim apache2 php libapache2-mod-php php-mysql mysql-server \
+    phpmyadmin php-mbstring php-zip php-gd php-json php-curl sudo
 
-# Create gitpod user and group with specific IDs
-RUN groupadd -g 33333 gitpod \
-    && useradd -l -u 33333 -g gitpod -md /home/gitpod -s /bin/bash -p gitpod gitpod \
-    && echo "gitpod ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/gitpod \
-    && chmod 0440 /etc/sudoers.d/gitpod
+# Start Apache and MySQL
+RUN service apache2 start && \
+    service mysql start
 
-# Set the user
-USER gitpod
+# Configure MySQL for phpMyAdmin
+RUN service mysql start && \
+    mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'phpmyadmin'@'localhost' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 
-# Set the working directory
-WORKDIR /workspace
+# Modify phpMyAdmin configuration
+RUN sed -i 's/\$dbserver='\''localhost'\''/\$dbserver='\''127.0.0.1'\''/' /etc/phpmyadmin/config-db.php
 
-CMD ["/bin/bash"]
+# Restart Apache
+RUN service apache2 restart
+
+# Expose ports for Apache and MySQL
+EXPOSE 80 3306
+
+# Start Apache and MySQL when container launches
+CMD service mysql start && apache2ctl -D FOREGROUND
