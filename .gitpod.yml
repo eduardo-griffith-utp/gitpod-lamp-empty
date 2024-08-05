@@ -1,18 +1,15 @@
 image:
-  file: .gitpod.dockerfile
-
-tasks:
-  - name: Terminal
-    command: |
-      echo "Welcome to your Ubuntu 22.04 environment!"
-      echo "You can now manually install Apache2, PHP, MySQL, and phpMyAdmin."
+  file: Dockerfile
 
 ports:
   - port: 80
-    onOpen: ignore
+    onOpen: open-preview
   - port: 3306
     onOpen: ignore
 
-vscode:
-  extensions:
-    - ms-azuretools.vscode-docker
+tasks:
+  - name: Apache & MySQL
+    command: |
+      sudo service mysql start
+      sudo apache2ctl start
+      echo "Apache and MySQL are running. You can access phpMyAdmin at '/phpmyadmin'"
