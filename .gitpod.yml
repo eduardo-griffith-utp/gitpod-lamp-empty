@@ -1,15 +1,32 @@
 image:
   file: .gitpod.dockerfile
 
+tasks:
+  - name: Start services
+    init: |
+      sudo service apache2 start
+      sudo service mysql start
+    command: tail -f /dev/null
+
 ports:
   - port: 80
-    onOpen: open-preview
-  - port: 3306
-    onOpen: ignore
+    onOpen: open-browser
 
-tasks:
-  - name: Apache & MySQL
-    command: |
-      sudo service mysql start
-      sudo apache2ctl start
-      echo "Apache and MySQL are running. You can access phpMyAdmin at '/phpmyadmin'"
+vscode:
+  extensions:
+    - ms-azuretools.vscode-docker
+    - bmewburn.vscode-intelephense-client
+    - esbenp.prettier-vscode
+    - rebornix.ruby
+    - eamodio.gitlens
+
+github:
+  prebuilds:
+    # enable for the master/default branch (defaults to true)
+    master: true
+    # enable for all branches in this repo (defaults to false)
+    branches: false
+    # enable for pull requests coming from this repo (defaults to true)
+    pullRequests: true
+    # enable for pull requests coming from forks (defaults to false)
+    pullRequestsFromForks: false
