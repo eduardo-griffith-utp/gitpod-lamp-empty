@@ -2,31 +2,17 @@ image:
   file: .gitpod.dockerfile
 
 tasks:
-  - name: Start services
-    init: |
-      sudo service mysql start
+  - name: Terminal
     command: |
-      sudo service apache2 start && tail -f /var/log/apache2/access.log
+      echo "Welcome to your Ubuntu 22.04 environment!"
+      echo "You can now manually install Apache2, PHP, MySQL, and phpMyAdmin."
 
 ports:
   - port: 80
-    onOpen: open-browser
+    onOpen: ignore
+  - port: 3306
+    onOpen: ignore
 
 vscode:
   extensions:
     - ms-azuretools.vscode-docker
-    - bmewburn.vscode-intelephense-client
-    - esbenp.prettier-vscode
-    - rebornix.ruby
-    - eamodio.gitlens
-
-github:
-  prebuilds:
-    # enable for the master/default branch (defaults to true)
-    master: true
-    # enable for all branches in this repo (defaults to false)
-    branches: false
-    # enable for pull requests coming from this repo (defaults to true)
-    pullRequests: true
-    # enable for pull requests coming from forks (defaults to false)
-    pullRequestsFromForks: false
