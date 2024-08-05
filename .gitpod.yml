@@ -1,0 +1,13 @@
+image:
+  file: Dockerfile
+
+ports:
+  - port: 80
+    onOpen: open-preview
+  - port: 443
+    onOpen: open-preview
+
+vscode:
+  extensions:
+    - felixfbecker.php-debug
+    - bmewburn.vscode-intelephense-client
