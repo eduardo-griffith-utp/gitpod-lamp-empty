@@ -4,9 +4,9 @@ image:
 tasks:
   - name: Start services
     init: |
-      sudo service apache2 start
       sudo service mysql start
-    command: tail -f /dev/null
+    command: |
+      sudo service apache2 start && tail -f /var/log/apache2/access.log
 
 ports:
   - port: 80
